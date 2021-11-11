@@ -40,13 +40,16 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   
   # Create reactive data frame
-  movies_selected <- ___
+  movies_selected <- reactive({
+    req(input$selected_var)
+    select(movies, input$selected_var)
+  })
   
   # Create data table
   output$moviestable <- DT::renderDataTable({
     req(input$selected_var)
     datatable(
-      data = movies %>% select(input$selected_var),
+      data = movies_selected(),
       options = list(pageLength = 10),
       rownames = FALSE
     )
